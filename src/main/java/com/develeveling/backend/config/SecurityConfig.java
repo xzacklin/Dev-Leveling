@@ -21,13 +21,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Step 1: Disable CSRF protection.
+
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // Step 2: Set up authorization rules.
+                // Set up authorization rules.
                 .authorizeHttpRequests(authorize -> authorize
                         // These specific endpoints are allowed without authentication.
-                        .requestMatchers("/api/v1/test/hello").permitAll()
+                        .requestMatchers("/api/v1/test/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/quests/**").permitAll()

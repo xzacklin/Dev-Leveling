@@ -1,0 +1,23 @@
+### Register a user first if you need one (ID will be 1)
+# You only need to run this once. If you run it again, you will get a "Username is already taken" error, which is correct.
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###
+### STEP 1: Trigger the automated daily quest generation for all users
+# This simulates the scheduled job running at midnight.
+# The endpoint is defined in your TestController.
+POST http://localhost:8080/api/v1/test/generate-quests
+
+
+###
+### STEP 2: Get User 1's details to verify new quests were created
+# After running the request above, check the "quests" list in the JSON response below.
+# It should contain two new quests: one for LeetCode and one for GitHub commits.
+GET http://localhost:8080/api/v1/users/1

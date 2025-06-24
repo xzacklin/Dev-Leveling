@@ -5,6 +5,8 @@ import com.develeveling.backend.model.QuestType;
 import jakarta.persistence.*;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -32,9 +34,14 @@ public class Quest {
 
     private boolean completed = false;
 
-    // This creates the relationship: Many Quests can belong to One User.
+    // Many Quests can belong to One User.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private User user;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "quest_tags", joinColumns = @JoinColumn(name = "quest_id"))
+    @Column(name = "tag")
+    private Set<String> tags = new HashSet<>();
 }
