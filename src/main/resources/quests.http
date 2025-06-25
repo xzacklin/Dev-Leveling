@@ -21,3 +21,24 @@ POST http://localhost:8080/api/v1/test/generate-quests
 # After running the request above, check the "quests" list in the JSON response below.
 # It should contain two new quests: one for LeetCode and one for GitHub commits.
 GET http://localhost:8080/api/v1/users/1
+
+### STEP 1: Set the target companies for User 1
+# We send a PUT request with a JSON array of strings
+PUT http://localhost:8080/api/v1/users/1/target-companies
+Content-Type: application/json
+
+[
+  "Google",
+  "Netflix",
+  "Apple"
+]
+
+
+###
+### STEP 2: Trigger the automated daily quest generation
+POST http://localhost:8080/api/v1/test/generate-quests
+
+
+###
+### STEP 3: Check the results for User 1
+GET http://localhost:8080/api/v1/users/1

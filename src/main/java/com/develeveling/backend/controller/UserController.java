@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -18,4 +20,11 @@ public class UserController {
         User user = userService.getUserById(userId);
         return ResponseEntity.ok(user);
     }
+
+    @PutMapping("/{userId}/target-companies")
+    public ResponseEntity<User> updateTargetCompanies(@PathVariable Long userId, @RequestBody Set<String> companies) {
+        User updatedUser = userService.updateTargetCompanies(userId, companies);
+        return ResponseEntity.ok(updatedUser);
+    }
+
 }
