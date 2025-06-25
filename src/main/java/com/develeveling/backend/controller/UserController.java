@@ -27,4 +27,10 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @PutMapping("/{userId}/target-roles")
+    public ResponseEntity<User> updateTargetRoles(@PathVariable Long userId, @RequestBody Set<String> roles) {
+        User updatedUser = userService.updateTargetRoles(userId, roles);
+        return ResponseEntity.ok(updatedUser);
+    }
+
 }

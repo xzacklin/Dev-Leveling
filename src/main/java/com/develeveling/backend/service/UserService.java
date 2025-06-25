@@ -24,4 +24,9 @@ public class UserService {
         user.setTargetCompanies(companies);
         return userRepository.save(user);
     }
+    public User updateTargetRoles(Long userId, Set<String> roles) {
+        User user = getUserById(userId);
+        user.setTargetRoles(roles);
+        return userRepository.save(user);
+    }
 }
