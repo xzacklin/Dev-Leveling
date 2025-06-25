@@ -1,0 +1,89 @@
+###
+### SETUP PHASE: CREATE USERS AND QUESTS
+###
+
+# Step 1: Register the first user, "playerone" (will become User ID 1)
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "playerone",
+  "email": "playerone@example.com",
+  "password": "password123"
+}
+
+### Step 2: Register the second user, "playertwo" (will become User ID 2)
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username": "playertwo",
+  "email": "playertwo@example.com",
+  "password": "password123"
+}
+
+
+### Step 3: Create a 50 XP quest for playerone (will become Quest ID 1)
+POST http://localhost:8080/api/v1/quests/user/1
+Content-Type: application/json
+
+{
+  "title": "Complete first quest",
+  "description": "A simple quest.",
+  "category": "PROGRAMMING",
+  "type": "DAILY",
+  "xpValue": 50
+}
+
+
+### Step 4: Create a 100 XP quest for playertwo (will become Quest ID 2)
+POST http://localhost:8080/api/v1/quests/user/2
+Content-Type: application/json
+
+{
+  "title": "Solve a hard problem",
+  "description": "A difficult quest.",
+  "category": "INTERVIEW_PREP",
+  "type": "WEEKLY",
+  "xpValue": 100
+}
+
+
+### Step 5: Create another 25 XP quest for playerone (will become Quest ID 3)
+POST http://localhost:8080/api/v1/quests/user/1
+Content-Type: application/json
+
+{
+  "title": "Network warmup",
+  "description": "A networking quest.",
+  "category": "NETWORKING",
+  "type": "DAILY",
+  "xpValue": 25
+}
+
+
+###
+### ACTION PHASE: COMPLETE QUESTS TO AWARD XP
+###
+
+# Step 6: Complete Quest ID 1 for playerone. (playerone total XP = 50)
+PATCH http://localhost:8080/api/v1/quests/1/complete
+
+
+### Step 7: Complete Quest ID 2 for playertwo. (playertwo total XP = 100)
+PATCH http://localhost:8080/api/v1/quests/2/complete
+
+
+### Step 8: Complete Quest ID 3 for playerone. (playerone total XP = 50 + 25 = 75)
+PATCH http://localhost:8080/api/v1/quests/3/complete
+
+
+###
+### VERIFICATION PHASE: CHECK THE LEADERBOARD
+###
+
+# Step 9: Get the final leaderboard.
+# The expected result is that "playertwo" will be ranked #1 with 100 XP,
+# and "playerone" will be ranked #2 with 75 XP.
+GET http://localhost:8080/api/v1/leaderboard
+

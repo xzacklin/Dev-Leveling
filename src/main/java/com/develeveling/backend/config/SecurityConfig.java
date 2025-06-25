@@ -31,7 +31,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/quests/**").permitAll()
+                        .requestMatchers("/api/v1/leaderboard").permitAll()
                         .anyRequest().authenticated()
+
                 );
 
         return http.build();

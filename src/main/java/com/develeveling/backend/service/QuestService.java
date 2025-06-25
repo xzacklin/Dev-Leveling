@@ -75,6 +75,8 @@ public class QuestService {
                 break;
         }
 
+        user.setTotalXp(user.getTotalXp() + xpToAdd);
+
         userRepository.save(user);
         return questRepository.save(quest);
     }

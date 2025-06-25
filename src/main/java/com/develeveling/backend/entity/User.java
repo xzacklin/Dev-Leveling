@@ -31,6 +31,7 @@ import java.util.Set;
         private int leetcodeXp = 0;
         private int initiativeXp = 0;
         private int networkingXp = 0;
+        private long totalXp = 0;
 
         @ElementCollection(fetch = FetchType.EAGER)
         @CollectionTable(name = "user_target_companies", joinColumns = @JoinColumn(name = "user_id"))
