@@ -43,7 +43,7 @@ public class LeetCodeWeaknessQuestGenerator implements QuestGenerator {
         quest.setDescription("Focus on your weak points! Solve a problem tagged with " + weakestTag + ".");
         quest.setCategory(QuestCategory.INTERVIEW_PREP);
         quest.setType(QuestType.DAILY);
-        quest.setXpValue(75);
+        quest.setXpValue(20);
         quest.setUser(user);
         quest.setTags(Set.of(weakestTag));
 

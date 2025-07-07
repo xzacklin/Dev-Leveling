@@ -39,7 +39,7 @@ public class JobApplicationQuestGenerator implements QuestGenerator {
         specificQuest.setDescription("Find a job posting for a " + randomRole + " that excites you and submit your application.");
         specificQuest.setCategory(QuestCategory.APPLICATIONS);
         specificQuest.setType(QuestType.DAILY);
-        specificQuest.setXpValue(70);
+        specificQuest.setXpValue(10);
         specificQuest.setUser(user);
         specificQuest.getTags().add("APPLICATION_SUBMITTED");
 

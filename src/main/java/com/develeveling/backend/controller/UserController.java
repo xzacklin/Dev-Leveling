@@ -33,4 +33,10 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @PutMapping("/{userId}/github-username")
+    public ResponseEntity<User> setGithubUsername(@PathVariable Long userId, @RequestBody String githubUsername) {
+        User updatedUser = userService.setGithubUsername(userId, githubUsername);
+        return ResponseEntity.ok(updatedUser);
+    }
+
 }

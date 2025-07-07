@@ -38,7 +38,7 @@ public class NetworkingQuestGenerator implements QuestGenerator {
         specificQuest.setDescription("Find an engineer or recruiter from " + randomCompany + " on LinkedIn and schedule a coffee chat.");
         specificQuest.setCategory(QuestCategory.NETWORKING);
         specificQuest.setType(QuestType.DAILY);
-        specificQuest.setXpValue(50);
+        specificQuest.setXpValue(10);
         specificQuest.setUser(user);
         specificQuest.getTags().add("COFFEE_CHAT");
 

@@ -26,6 +26,9 @@ import java.util.Set;
         @Column(unique = true, nullable = false)
         private String email;
 
+        @Column(unique = true, nullable = true)
+        private String githubUsername;
+
         // Scores for the four main categories
         private int programmingXp = 0;
         private int leetcodeXp = 0;

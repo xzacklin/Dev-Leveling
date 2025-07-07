@@ -29,4 +29,10 @@ public class UserService {
         user.setTargetRoles(roles);
         return userRepository.save(user);
     }
+
+    public User setGithubUsername(Long userId, String githubUsername) {
+        User user = getUserById(userId);
+        user.setGithubUsername(githubUsername);
+        return userRepository.save(user);
+    }
 }
