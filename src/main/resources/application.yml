@@ -14,3 +14,7 @@ spring:
                 format_sql: true
     server:
         port: 8080
+
+    encryption:
+        aes:
+            key: "your-super-secret-32-byte-key!!"
