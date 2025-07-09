@@ -3,8 +3,8 @@ spring:
         name: backend
     datasource:
         url: jdbc:postgresql://localhost:5432/gamified_tracker
-        username: lydazacklin
-        password: 0680
+        username: ${DB_USERNAME}
+        password: ${DB_PASSWORD}
     jpa:
         hibernate:
             ddl-auto: update
@@ -12,9 +12,16 @@ spring:
         properties:
             hibernate:
                 format_sql: true
-    server:
+    security:
+        oauth2:
+            client:
+                registration:
+                    github:
+                        clientId: ${GITHUB_CLIENT_ID}
+                        clientSecret: ${GITHUB_CLIENT_SECRET}
+server:
         port: 8080
 
-    encryption:
+encryption:
         aes:
-            key: "your-super-secret-32-byte-key!!"
+          key: ${ENCRYPTION_AES_KEY}

@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserGitHubTokenRepository extends JpaRepository<UserGitHubToken, Long> {
-    // Spring Data JPA will provide standard CRUD methods.
 }

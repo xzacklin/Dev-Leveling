@@ -2,6 +2,8 @@ package com.develeveling.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -30,11 +32,27 @@ import java.util.Set;
         private String githubUsername;
 
         // Scores for the four main categories
+        @Column(nullable = true)
         private int programmingXp = 0;
+
+        @Column(nullable = true)
         private int leetcodeXp = 0;
+
+        @Column(nullable = true)
         private int initiativeXp = 0;
+
+        @Column(nullable = true)
         private int networkingXp = 0;
+
         private long totalXp = 0;
+
+        @Column(nullable = true)
+        private int githubCommitStreak = 0;
+
+        @Column(nullable = true)
+        private int githubCommitsLastWeek = 0;
+
+        private LocalDate githubLastCommitDate;
 
         @ElementCollection(fetch = FetchType.EAGER)
         @CollectionTable(name = "user_target_companies", joinColumns = @JoinColumn(name = "user_id"))
