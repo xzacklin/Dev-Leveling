@@ -1,5 +1,6 @@
 package com.develeveling.backend.controller;
 
+import com.develeveling.backend.dto.UpdateGithubUsernameRequest;
 import com.develeveling.backend.entity.User;
 import com.develeveling.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/github-username")
-    public ResponseEntity<User> setGithubUsername(@PathVariable Long userId, @RequestBody String githubUsername) {
-        User updatedUser = userService.setGithubUsername(userId, githubUsername);
+    public ResponseEntity<User> setGithubUsername(@PathVariable Long userId, @RequestBody UpdateGithubUsernameRequest request) {
+        User updatedUser = userService.setGithubUsername(userId, request.getGithubUsername());
         return ResponseEntity.ok(updatedUser);
     }
 

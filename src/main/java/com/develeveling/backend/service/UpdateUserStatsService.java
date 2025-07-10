@@ -33,6 +33,7 @@ public class UpdateUserStatsService {
 
         for (User user : users) {
             gitHubStatsProcessingService.processGitHubActivityForUser(user);
+            userRepository.save(user);
             verifyNewProjectQuest(user);
         }
 
