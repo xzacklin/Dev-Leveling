@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import com.develeveling.backend.service.UpdateUserStatsService;
 
 @RestController
 @RequestMapping("/api/v1/test")
@@ -16,7 +17,7 @@ public class TestController {
 
     private final QuestGenerationService questGenerationService;
     private final GitHubApiService gitHubApiService;
-
+    private final UpdateUserStatsService updateUserStatsService;
     @Value("${GITHUB_PAT}")
     private String githubPat;
 
@@ -31,5 +32,10 @@ public class TestController {
         return gitHubApiService.getContributionCalendar(username, githubPat)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+    @PostMapping("/update-stats")
+    public ResponseEntity<String> triggerStatsUpdate() {
+        updateUserStatsService.updateAllUserGitHubStats();
+        return ResponseEntity.ok("User stats update job triggered successfully!");
     }
 }
