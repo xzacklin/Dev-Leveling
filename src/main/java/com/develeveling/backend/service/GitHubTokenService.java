@@ -41,7 +41,7 @@ public class GitHubTokenService {
             throw new IllegalStateException("I could not extract the GitHub username ('login' attribute) from the token.");
         }
 
-        User user = userRepository.findByUsername(githubUsername)
+        User user = userRepository.findByGithubUsername(githubUsername)
                 .orElseThrow(() -> new EntityNotFoundException("I could not find a user with the GitHub username: " + githubUsername));
 
         String rawAccessToken = authorizedClient.getAccessToken().getTokenValue();
