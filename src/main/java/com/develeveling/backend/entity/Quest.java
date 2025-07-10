@@ -37,6 +37,7 @@ public class Quest {
     @Column(nullable = false, updatable = false)
     private ZonedDateTime createdAt;
 
+    private ZonedDateTime completedAt;
     private int xpValue;
 
     private boolean completed = false;

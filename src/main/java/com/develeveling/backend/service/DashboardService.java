@@ -30,7 +30,8 @@ public class DashboardService {
                 .orElseThrow(() -> new EntityNotFoundException("I can't find a user with ID: " + userId));
 
         ZonedDateTime oneWeekAgo = ZonedDateTime.now().minusWeeks(1);
-        long questsThisWeek = questRepository.countByUserAndCompletedIsTrueAndCompletedAtAfter(user, oneWeekAgo);
+        long questsThisWeek = questRepository.countCompletedQuestsAfter
+                (user, oneWeekAgo);
 
         return new UserDashboardStatsDto(
                 user.getGithubCommitStreak(),
