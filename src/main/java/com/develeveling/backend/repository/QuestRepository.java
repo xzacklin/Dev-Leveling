@@ -11,4 +11,6 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
 
     List<Quest> findByUserAndCompletedIsTrue(User user);
 
+    List<Quest> findByUserAndCompletedIsFalse(User user);
+
 }

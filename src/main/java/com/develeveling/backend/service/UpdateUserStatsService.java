@@ -1,6 +1,9 @@
 package com.develeveling.backend.service;
 
+import com.develeveling.backend.dto.GitHubRepoDto;
+import com.develeveling.backend.entity.Quest;
 import com.develeveling.backend.entity.User;
+import com.develeveling.backend.repository.QuestRepository;
 import com.develeveling.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * A scheduled service responsible for periodically updating user statistics.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -20,25 +20,50 @@ public class UpdateUserStatsService {
 
     private final UserRepository userRepository;
     private final GitHubStatsProcessingService gitHubStatsProcessingService;
+    private final QuestRepository questRepository;
+    private final GitHubApiService gitHubApiService;
+    private final GitHubTokenService gitHubTokenService;
+    private final QuestService questService;
 
-    /**
-     * A nightly job that updates the GitHub contribution stats for all users.
-     * Runs at 12:05 AM server time, just before the quest generation job.
-     */
-    @Scheduled(cron = "0 5 0 * * ?") // Runs at 12:05 AM daily
+    @Scheduled(cron = "0 5 0 * * ?")
     @Transactional
     public void updateAllUserGitHubStats() {
         log.info("Starting nightly job: UpdateAllUserGitHubStats...");
         List<User> users = userRepository.findAll();
 
         for (User user : users) {
-            // This method modifies the user object in place
             gitHubStatsProcessingService.processGitHubActivityForUser(user);
+            verifyNewProjectQuest(user);
         }
 
-        // The @Transactional annotation will handle saving the modified user entities
-        // when the method completes successfully.
-
         log.info("Finished nightly job: UpdateAllUserGitHubStats. Processed {} users.", users.size());
+    }
+
+    private void verifyNewProjectQuest(User user) {
+        if (user.getGithubUsername() == null) return;
+
+        questRepository.findByUserAndCompletedIsFalse(user).stream()
+                .filter(quest -> quest.getTags().contains("NEW_PROJECT"))
+                .findFirst()
+                .ifPresent(quest -> {
+                    try {
+                        String token = gitHubTokenService.getAccessTokenForUser(user.getId());
+                        List<GitHubRepoDto> repos = gitHubApiService.getRepositories(user.getGithubUsername(), token)
+                                .collectList()
+                                .block();
+
+                        if (repos == null) return;
+
+                        boolean newRepoExists = repos.stream()
+                                .anyMatch(repo -> repo.createdAt().isAfter(quest.getCreatedAt()));
+
+                        if (newRepoExists) {
+                            log.info("Completing NEW_PROJECT quest {} for user {}", quest.getId(), user.getUsername());
+                            questService.completeQuest(quest.getId());
+                        }
+                    } catch (Exception e) {
+                        log.error("Failed to verify NEW_PROJECT quest for user {}", user.getUsername(), e);
+                    }
+                });
     }
 }

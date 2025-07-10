@@ -7,6 +7,9 @@ import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.ZonedDateTime;
+
 
 @Data
 @Entity
@@ -29,6 +32,10 @@ public class Quest {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private QuestCategory category;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private ZonedDateTime createdAt;
 
     private int xpValue;
 

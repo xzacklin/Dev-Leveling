@@ -2,12 +2,14 @@ package com.develeveling.backend.service;
 
 import com.develeveling.backend.dto.CommitActivityStatsDto;
 import com.develeveling.backend.dto.ContributionCalendarDto;
+import com.develeveling.backend.dto.GitHubRepoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
@@ -83,5 +85,18 @@ public class GitHubApiService {
      */
     private boolean isRateLimitError(Throwable throwable) {
         return throwable instanceof WebClientResponseException.Forbidden;
+    }
+
+    public Flux<GitHubRepoDto> getRepositories(String username, String accessToken) {
+        return this.webClient.get()
+                .uri("/users/{username}/repos?sort=created&direction=desc", username)
+                .headers(headers -> headers.setBearerAuth(accessToken))
+                .retrieve()
+                .bodyToFlux(GitHubRepoDto.class)
+                .retryWhen(getRetrySpec("repositories for " + username))
+                .onErrorResume(e -> {
+                    log.error("I failed to fetch repositories for {}. Error: {}", username, e.getMessage());
+                    return Flux.empty();
+                });
     }
 }
