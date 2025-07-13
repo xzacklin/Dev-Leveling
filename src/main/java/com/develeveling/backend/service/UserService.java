@@ -32,11 +32,7 @@ public class UserService {
         }
         return user;
     }
-    public User updateTargetCompanies(Long userId, Set<String> companies) {
-        User user = getUserById(userId);
-        user.setTargetCompanies(companies);
-        return userRepository.save(user);
-    }
+
     public User updateTargetRoles(Long userId, Set<String> roles) {
         User user = getUserById(userId);
         user.setTargetRoles(roles);
