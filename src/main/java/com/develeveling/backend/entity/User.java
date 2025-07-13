@@ -54,10 +54,9 @@ import java.util.Set;
 
         private LocalDate githubLastCommitDate;
 
-        @ElementCollection(fetch = FetchType.EAGER)
-        @CollectionTable(name = "user_target_companies", joinColumns = @JoinColumn(name = "user_id"))
-        @Column(name = "company_name")
-        private Set<String> targetCompanies = new HashSet<>();
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+        @JsonManagedReference("user-targetcompany")
+        private List<TargetCompany> targetCompanies = new ArrayList<>();
 
         @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
         @JsonManagedReference

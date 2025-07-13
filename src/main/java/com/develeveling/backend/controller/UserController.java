@@ -22,9 +22,9 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/{userId}/target-companies")
-    public ResponseEntity<User> updateTargetCompanies(@PathVariable Long userId, @RequestBody Set<String> companies) {
-        User updatedUser = userService.updateTargetCompanies(userId, companies);
+    @PostMapping("/{userId}/target-companies")
+    public ResponseEntity<User> addTargetCompany(@PathVariable Long userId, @RequestBody AddTargetCompanyRequest request) {
+        User updatedUser = userService.addTargetCompany(userId, request.getCompanyName());
         return ResponseEntity.ok(updatedUser);
     }
 
