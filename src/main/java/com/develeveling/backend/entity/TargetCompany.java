@@ -1,6 +1,7 @@
 package com.develeveling.backend.entity;
 
 import com.develeveling.backend.model.NetworkingStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference; // I'm adding this import.
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class TargetCompany {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference("user-targetcompany")
     private User user;
 
     @Column(nullable = false)
