@@ -1,7 +1,7 @@
 package com.develeveling.backend.entity;
 
 import com.develeveling.backend.model.NetworkingStatus;
-import com.fasterxml.jackson.annotation.JsonBackReference; // I'm adding this import.
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

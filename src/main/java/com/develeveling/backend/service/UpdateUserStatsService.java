@@ -1,7 +1,6 @@
 package com.develeveling.backend.service;
 
 import com.develeveling.backend.dto.GitHubRepoDto;
-import com.develeveling.backend.entity.Quest;
 import com.develeveling.backend.entity.User;
 import com.develeveling.backend.repository.QuestRepository;
 import com.develeveling.backend.repository.UserRepository;

@@ -9,6 +9,7 @@ import com.develeveling.backend.repository.QuestRepository;
 import com.develeveling.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,64 +21,60 @@ public class QuestService {
     @Autowired
     private UserRepository userRepository;
 
+    private static final int CUSTOM_QUEST_XP_VALUE = 5;
+
     public Quest createQuestForUser(Long userId, QuestDto questDto) {
-        //Find the user who this quest will belong to.
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-        // Create a new Quest entity from the DTO data.
         Quest quest = new Quest();
         quest.setTitle(questDto.title());
         quest.setDescription(questDto.description());
-        quest.setXpValue(questDto.xpValue());
-
-        // Convert the string from the DTO into our Enum types
+        quest.setXpValue(CUSTOM_QUEST_XP_VALUE);
         quest.setCategory(QuestCategory.valueOf(questDto.category().toUpperCase()));
         quest.setType(QuestType.valueOf(questDto.type().toUpperCase()));
-
-        // Link the quest to the user
         quest.setUser(user);
 
-        // Save the new quest to the database
         return questRepository.save(quest);
     }
 
     public Quest completeQuest(Long questId) {
-        //Find the quest by its ID.
-        Quest quest = questRepository.findById(questId)
-                .orElseThrow(() -> new EntityNotFoundException("Quest not found with id: " + questId));
+        try {
+            Quest quest = questRepository.findById(questId)
+                    .orElseThrow(() -> new EntityNotFoundException("Quest not found with id: " + questId));
 
-        //  Check if the quest is already completed to prevent duplicate XP.
-        if (quest.isCompleted()) {
-            throw new IllegalStateException("Quest with id: " + questId + " is already completed.");
+            if (quest.isCompleted()) {
+                throw new IllegalStateException("Quest with id: " + questId + " is already completed.");
+            }
+
+            quest.setCompleted(true);
+
+            User user = quest.getUser();
+            int xpToAdd = quest.getXpValue();
+            QuestCategory category = quest.getCategory();
+
+            switch (category) {
+                case PROGRAMMING:
+                    user.setProgrammingXp(user.getProgrammingXp() + xpToAdd);
+                    break;
+                case INTERVIEW_PREP:
+                    user.setLeetcodeXp(user.getLeetcodeXp() + xpToAdd);
+                    break;
+                case APPLICATIONS:
+                    user.setInitiativeXp(user.getInitiativeXp() + xpToAdd);
+                    break;
+                case NETWORKING:
+                    user.setNetworkingXp(user.getNetworkingXp() + xpToAdd);
+                    break;
+            }
+
+            user.setTotalXp(user.getTotalXp() + xpToAdd);
+
+            userRepository.save(user);
+            return questRepository.save(quest);
+
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new IllegalStateException("Quest with id: " + questId + " was completed by another process.", e);
         }
-
-        //Mark the quest as completed.
-        quest.setCompleted(true);
-
-        //Get the user and award XP based on the quest's category.
-        User user = quest.getUser();
-        int xpToAdd = quest.getXpValue();
-        QuestCategory category = quest.getCategory();
-
-        switch (category) {
-            case PROGRAMMING:
-                user.setProgrammingXp(user.getProgrammingXp() + xpToAdd);
-                break;
-            case INTERVIEW_PREP:
-                user.setLeetcodeXp(user.getLeetcodeXp() + xpToAdd);
-                break;
-            case APPLICATIONS:
-                user.setInitiativeXp(user.getInitiativeXp() + xpToAdd);
-                break;
-            case NETWORKING:
-                user.setNetworkingXp(user.getNetworkingXp() + xpToAdd);
-                break;
-        }
-
-        user.setTotalXp(user.getTotalXp() + xpToAdd);
-
-        userRepository.save(user);
-        return questRepository.save(quest);
     }
 }
