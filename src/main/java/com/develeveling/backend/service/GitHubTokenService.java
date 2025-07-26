@@ -45,13 +45,11 @@ public class GitHubTokenService {
                 .orElseThrow(() -> new EntityNotFoundException("I could not find a user with the GitHub username: " + githubUsername));
 
         UserGitHubToken token = tokenRepository.findById(user.getId())
-                .orElse(new UserGitHubToken()); // If not, I'll create a new, empty one.
+                .orElse(new UserGitHubToken());
 
-        // I'll ensure the user is set and update the access token.
         token.setUser(user);
         token.setAccessToken(authorizedClient.getAccessToken().getTokenValue());
 
-        // This will now correctly perform an insert or an update.
         tokenRepository.save(token);
     }
 
