@@ -9,7 +9,7 @@ Content-Type: application/json
 {
   "username": "playerone",
   "email": "playerone@example.com",
-  "password": "password123"
+  "password": "Password123!"
 }
 
 ### Step 2: Register the second user, "playertwo" (will become User ID 2)
